@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCamTimeLapse", "WebCamTimeLapse.csproj", "{CA6430CE-6295-46B5-A683-59BF5EF58642}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA6430CE-6295-46B5-A683-59BF5EF58642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6430CE-6295-46B5-A683-59BF5EF58642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6430CE-6295-46B5-A683-59BF5EF58642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6430CE-6295-46B5-A683-59BF5EF58642}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5022CC1E-8513-424B-84D0-AFD9AA1CB862}
+	EndGlobalSection
+EndGlobal
