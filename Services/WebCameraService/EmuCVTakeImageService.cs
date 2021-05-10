@@ -22,5 +22,10 @@ namespace WebCamTimeLapse.Services.WebCameraService
                 return null;
             }
         }
+
+        public string Test()
+        {
+            return "Output";
+        }
     }
 }
