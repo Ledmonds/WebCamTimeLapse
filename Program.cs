@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Timers;
 using WebCamTimeLapse.DI;
 using WebCamTimeLapse.Services.WebCameraService;
 
@@ -6,35 +8,44 @@ namespace WebCamTimeLapse
 {
     class Program
     {
+        private static Timer aTimer;
+        private static IServiceScope scope;
+        private static IWebCameraService cameraService;
+
         // Properties    
         static void Main(string[] args)
         {
             // Setting up application command line variables.
-            int intervalTime = (args.Length >= 1) ? int.Parse(args[0]) : 250;
+            // ToDo: Pass these all off to the IWebCameraService Constructor.
+            int intervalTime = (args.Length >= 1) ? int.Parse(args[0]) : 1000;
             string outputPath = (args.Length >= 2) ? args[1] : @"C:\";
             string namingPrefix = (args.Length >= 3) ? args[2] : "image_output";
-            string imageExtension = (args.Length >= 3) ? args[3] : "png"; // Add in some validation here on correct extension types.
+            // ToDo: Add in some validation here on correct extension types.
+            string imageExtension = (args.Length >= 3) ? args[3] : "png"; 
 
             // Setting up the Applications DI
             var serviceProvider = ServiceCollectionUtils.RegisterServices();
-            IServiceScope scope = serviceProvider.CreateScope();
-
-            
-
+            scope = serviceProvider.CreateScope();
+            cameraService = scope.ServiceProvider.GetRequiredService<IWebCameraService>();
 
 
-            var cameraService = scope.ServiceProvider.GetRequiredService<IWebCameraService>();
-            var image = cameraService.TakeImage();
-            image.Save($"{outputPath}{namingPrefix}.{imageExtension}");
+            // Create a timer and set a two second interval.
+            aTimer = new System.Timers.Timer();
+            aTimer.Interval = intervalTime;
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.Enabled = true;
 
+            Console.WriteLine("Press the Enter key to exit the program at any time... ");
+            Console.ReadLine();
 
-
-
-
-            //https://docs.microsoft.com/en-us/dotnet/api/system.timers.timer.elapsed?view=net-5.0
-
-            // Write Dispose Class.
+            // ToDo: Write Dispose Class.
             return;
+        }
+
+        private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            var image = cameraService.TakeImage();
+            image.Save(@$"C:\{DateTime.Now.Second.ToString()}.png");
         }
     }
 }

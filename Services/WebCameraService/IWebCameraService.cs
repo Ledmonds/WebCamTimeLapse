@@ -9,6 +9,5 @@ namespace WebCamTimeLapse.Services.WebCameraService
         /// </summary>
         /// <returns></returns>
         public Bitmap TakeImage();
-        public string Test();
     }
 }
