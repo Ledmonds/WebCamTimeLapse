@@ -8,11 +8,7 @@ namespace WebCamTimeLapse
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            VideoCapture capture = new VideoCapture(); //create a camera capture
-            var image = capture.QueryFrame(); //take a picture
-
-            image.Save(@"C:\output.image.png");
+            Console.WriteLine("System Starting");
         }
     }
 }
