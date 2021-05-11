@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AnimatedGif;
+using Microsoft.Extensions.DependencyInjection;
+using WebCamTimeLapse.Services.ImageAnimatingService;
 using WebCamTimeLapse.Services.WebCameraService;
 
 namespace WebCamTimeLapse.DI
@@ -13,7 +15,11 @@ namespace WebCamTimeLapse.DI
         {
             // Service Collection
             var services = new ServiceCollection();
+
+            // Add in the Services
             services.AddSingleton<IWebCameraService, EmuCVTakeImageService>();
+            services.AddSingleton<IImageAnimatingService, AnimatedGifService>();
+
             return services.BuildServiceProvider();
         }
     }

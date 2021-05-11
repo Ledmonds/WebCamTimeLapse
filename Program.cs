@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AnimatedGif;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Timers;
 using WebCamTimeLapse.DI;
+using WebCamTimeLapse.Services.ImageAnimatingService;
 using WebCamTimeLapse.Services.WebCameraService;
 
 namespace WebCamTimeLapse
@@ -10,7 +12,7 @@ namespace WebCamTimeLapse
     {
         private static Timer aTimer;
         private static IServiceScope scope;
-        private static IWebCameraService cameraService;
+        private static Camera camera;
 
         // Properties    
         static void Main(string[] args)
@@ -26,26 +28,31 @@ namespace WebCamTimeLapse
             // Setting up the Applications DI
             var serviceProvider = ServiceCollectionUtils.RegisterServices();
             scope = serviceProvider.CreateScope();
-            cameraService = scope.ServiceProvider.GetRequiredService<IWebCameraService>();
+            var cameraService = scope.ServiceProvider.GetRequiredService<IWebCameraService>();
+            var imageAnimator = scope.ServiceProvider.GetRequiredService<IImageAnimatingService>(); // ToDo drop the T inversion here.
+            camera = new Camera(cameraService, imageAnimator);
 
 
             // Create a timer and set a two second interval.
+            // ToDo: Clean this code up into it's own nice little class or service. Timer Service maybe.
+            // ToDo: Write Dispose Class.
             aTimer = new System.Timers.Timer();
             aTimer.Interval = intervalTime;
             aTimer.Elapsed += OnTimedEvent;
             aTimer.Enabled = true;
 
-            Console.WriteLine("Press the Enter key to exit the program at any time... ");
+            Console.WriteLine("Press a key to stop taking photos... ");
             Console.ReadLine();
 
-            // ToDo: Write Dispose Class.
+            camera.
+
             return;
         }
 
         private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            var image = cameraService.TakeImage();
-            image.Save(@$"C:\{DateTime.Now.Second.ToString()}.png");
+            var image = camera.CameraService.TakeImage();
+            camera.ImageList.Add(image);
         }
     }
 }
