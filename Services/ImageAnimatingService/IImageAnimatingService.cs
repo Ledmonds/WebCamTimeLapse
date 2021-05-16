@@ -9,6 +9,6 @@ namespace WebCamTimeLapse.Services.ImageAnimatingService
         /// Generates an animated Gif image.
         /// </summary>
         /// <returns></returns>
-        byte[] GenerateAnimatedGif(IEnumerable<Image> images);
+        void GenerateAnimatedGif(IEnumerable<Image> images, string filepath);
     }
 }

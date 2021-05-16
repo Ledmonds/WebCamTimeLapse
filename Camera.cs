@@ -45,6 +45,15 @@ namespace WebCamTimeLapse.Services.WebCameraService
 
         // Methods
         /// <summary>
+        /// Take a single image and push it to the image list.
+        /// </summary>
+        public void TakeImage()
+        {
+            var image = cameraService.TakeImage();
+            ImageList.Add(image);
+        }
+
+        /// <summary>
         /// Saves the image files to disk.
         /// </summary>
         /// <param name="filepath"></param>
@@ -64,21 +73,16 @@ namespace WebCamTimeLapse.Services.WebCameraService
         /// <summary>
         /// Saves the collected images out to an animated gif file.
         /// </summary>
-        public void SaveGifToDisk(byte[] inputStream)
+        public void SaveGifToDisk()
         {
             try
             {
-                File.WriteAllBytes($"{filepath}{filename}.gif", inputStream);
+                imageAnimatorService.GenerateAnimatedGif(ImageList.ToList(), $"{filepath}{filename}");
             }
             catch (Exception e)
             {
                 // ToDo: Log
             }
-        }
-
-        private byte[] generateGifFromImages()
-        {
-            return new byte[0];
         }
     }
 }

@@ -44,15 +44,16 @@ namespace WebCamTimeLapse
             Console.WriteLine("Press a key to stop taking photos... ");
             Console.ReadLine();
 
-            camera.
+            aTimer.Enabled = false;
+
+            camera.SaveGifToDisk();
 
             return;
         }
 
         private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
         {
-            var image = camera.CameraService.TakeImage();
-            camera.ImageList.Add(image);
+            camera.TakeImage();
         }
     }
 }
