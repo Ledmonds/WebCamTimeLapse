@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace WebCamTimeLapse.Services.ImageAnimatingService
+namespace WebCamTimeLapse.ImageAnimatingService.ImageAnimatingService
 {
     public interface IImageAnimatingService
     {
-        /// <summary>
-        /// Generates an animated Gif image.
-        /// </summary>
-        /// <returns></returns>
-        void GenerateAnimatedGif(IEnumerable<Image> images, string filepath);
+        void AnimateGifToFile(IEnumerable<Image> images);
+        void AnimateGifToStream(IEnumerable<Image> images);
     }
 }

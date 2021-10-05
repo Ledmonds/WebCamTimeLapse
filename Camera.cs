@@ -1,88 +1,24 @@
-﻿using AnimatedGif;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using WebCamTimeLapse.Services.ImageAnimatingService;
+using WebCamTimeLapse.WebCameraService.WebCameraService;
 
-namespace WebCamTimeLapse.Services.WebCameraService
+namespace WebCamTimeLapse
 {
     class Camera
     {
-        // Properties
         public List<Image> ImageList { get; set; }
-        private IWebCameraService cameraService { get; set; }
-        private IImageAnimatingService imageAnimatorService { get; set; }
+        private IWebCameraService imageCapture { get; set; }
 
-        private string filepath;
-        private string filename;
-        private string singleImageExtension;
-
-
-        // Constructor
-        public Camera()
+        public Camera(IWebCameraService _diWebCameraService)
         {
             ImageList = new List<Image>();
-            cameraService = null;
-            imageAnimatorService = null;
-
-            filepath = string.Empty;
-            filename = string.Empty;
-            singleImageExtension = string.Empty;
-        }
-        public Camera(IWebCameraService _diWebCameraService, IImageAnimatingService _imageAnimatorService, string _filepath = @"C:\", string _filename = "default_name", string _singleImageExtension = "png")
-        {
-            ImageList = new List<Image>();
-            cameraService = _diWebCameraService;
-            imageAnimatorService = _imageAnimatorService;
-
-            filepath = _filepath;
-            filename = _filename;
-            singleImageExtension = _singleImageExtension;
+            imageCapture = _diWebCameraService;
         }
 
-
-        // Methods
-        /// <summary>
-        /// Take a single image and push it to the image list.
-        /// </summary>
         public void TakeImage()
         {
-            var image = cameraService.TakeImage();
+            var image = imageCapture.TakeImage();
             ImageList.Add(image);
-        }
-
-        /// <summary>
-        /// Saves the image files to disk.
-        /// </summary>
-        /// <param name="filepath"></param>
-        /// <param name="filename"></param>
-        /// <param name="extension"></param>
-        public void SaveImagesToDisk()
-        {
-            if (ImageList != null && ImageList.Count() > 0)
-            {
-                for (int i = 0; i < ImageList.Count(); ++i)
-                {
-                    ImageList.ElementAt(i).Save($"{filepath}{filename}_{i}.{singleImageExtension}");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Saves the collected images out to an animated gif file.
-        /// </summary>
-        public void SaveGifToDisk()
-        {
-            try
-            {
-                imageAnimatorService.GenerateAnimatedGif(ImageList.ToList(), $"{filepath}{filename}");
-            }
-            catch (Exception e)
-            {
-                // ToDo: Log
-            }
         }
     }
 }

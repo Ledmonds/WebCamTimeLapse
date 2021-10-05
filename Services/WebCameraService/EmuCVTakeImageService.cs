@@ -2,10 +2,16 @@
 using System;
 using System.Drawing;
 
-namespace WebCamTimeLapse.Services.WebCameraService
+namespace WebCamTimeLapse.WebCameraService.WebCameraService
 {
     public class EmuCVTakeImageService : IWebCameraService
     {
+        public (int, int) Resoloution { get; set; }
+        public EmuCVTakeImageService((int, int) resoloution)
+        {
+            Resoloution = resoloution;
+        }
+
         public Bitmap TakeImage()
         {
            try
@@ -13,14 +19,14 @@ namespace WebCamTimeLapse.Services.WebCameraService
                 using (var capture = new VideoCapture())
                 {
                     var image = capture.QueryFrame();
-                    return (image != null) ? image.ToBitmap() : new Bitmap(480, 320);
+                    return (image != null) ? image.ToBitmap() : new Bitmap(Resoloution.Item1, Resoloution.Item2);
                 }
             }
             catch (Exception e)
             {
                 // Log and throw back a new blank image.
                 Console.WriteLine($"Error: {DateTime.Now.ToString()}: {e.Message}");
-                return new Bitmap(480, 320);
+                return new Bitmap(Resoloution.Item1, Resoloution.Item2);
             }
         }
     }
