@@ -1,48 +1,56 @@
-﻿using System;
+﻿using SimpleInjector;
+using System;
 using System.Timers;
-using WebCamTimeLapse.Configurations;
-using WebCamTimeLapse.ImageAnimatingService.ImageAnimatingService;
-using WebCamTimeLapse.WebCameraService.WebCameraService;
+using WebCamTimeLapse.DependencyInjection;
+using WebCamTimeLapse.Services.CameraServices;
+using WebCamTimeLapse.Services.GifServices;
 
-namespace WebCamTimeLapse
+namespace WebCamTimeLapse;
+
+class Program
 {
-    class Program
+    static readonly Container container;
+
+    static Program()
     {
-        private static Timer aTimer;
-        private static Camera camera;
+        container = Injection.RegisterDependencyInjection();
+    }
 
-        // Properties    
+    static void Main(string[] args)
+    {
+        var eventTimer = RegisterEventTimer();
 
-        static void Main(string[] args)
-        {
-            var configuration = new Configuration(args);
-            var imageCapture = new EmuCVTakeImageService(configuration.Resoloution);
-            var imageAnimator = new AnimatedGifService(configuration.IntervalTime, configuration.Filepath, configuration.Filename, configuration.Extension);
+        Console.WriteLine("Press a key to stop taking photos... ");
+        Console.ReadLine();
 
-            camera = new Camera(imageCapture);
+        eventTimer.Enabled = false;
 
+        AnimateGifToFile();
 
-            // Create a timer and set a two second interval.s
-            // ToDo: Clean this code up into it's own nice little class or service. Timer Service maybe.
-            // ToDo: Write Dispose Class.
-            aTimer = new System.Timers.Timer();
-            aTimer.Interval = configuration.IntervalTime;
-            aTimer.Elapsed += OnTimedEvent;
-            aTimer.Enabled = true;
+        return;
+    }
 
-            Console.WriteLine("Press a key to stop taking photos... ");
-            Console.ReadLine();
+    private static Timer RegisterEventTimer()
+    {
+        var imageCaptureTimer = new Timer();
+        imageCaptureTimer.Interval = 30;
+        imageCaptureTimer.Elapsed += OnTimedEvent;
+        imageCaptureTimer.Enabled = true;
 
-            aTimer.Enabled = false;
+        return imageCaptureTimer;
+    }
 
-            imageAnimator.AnimateGifToFile(camera.ImageList);
+    private static void OnTimedEvent(object source, ElapsedEventArgs e)
+    {
+        var cameraService = container.GetInstance<ICameraService>();
+        cameraService.TakeImage();
+    }
 
-            return;
-        }
+    private static void AnimateGifToFile()
+    {
+        var cameraService = container.GetInstance<ICameraService>();
+        var gifService = container.GetInstance<IGifService>();
 
-        private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
-        {
-            camera.TakeImage();
-        }
+        gifService.AnimateGifToFile(cameraService.ReteriveCapturedImages());
     }
 }
