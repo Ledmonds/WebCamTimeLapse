@@ -1,27 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using WebCamTimeLapse.Repositories;
 using WebCamTimeLapse.Services.WebCameraServices;
 
 namespace WebCamTimeLapse.Services.CameraServices;
 
 class CameraService : ICameraService
 {
-    private IEnumerable<Bitmap> _imageList { get; set; } = new List<Bitmap>();
-    private IWebcamService _camera { get; init; }
+    private IImageRepository _imageRepository;
+    private IWebcamService _camera;
 
-    public CameraService(IWebcamService camera)
+    public CameraService(IWebcamService camera, IImageRepository repository)
     {
         _camera = camera;
+        _imageRepository = repository;
     }
 
-    public void TakeImage()
+    public void CaptureFrame()
     {
-        _imageList = _imageList.Append(_camera.CaptureImage());
-    }
-
-    public IEnumerable<Bitmap> ReteriveCapturedImages()
-    {
-        return _imageList;
+        var image = _camera.CaptureImage();
+        _imageRepository.Add(image);
     }
 }

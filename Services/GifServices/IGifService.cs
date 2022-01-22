@@ -5,5 +5,5 @@ namespace WebCamTimeLapse.Services.GifServices;
 
 public interface IGifService
 {
-    void AnimateGifToFile(IEnumerable<Image> images);
+    void AnimateGifToFile(IReadOnlyCollection<Image> images);
 }

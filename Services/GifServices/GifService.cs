@@ -16,7 +16,7 @@ internal class GifService : IGifService
         _configuration = configuration;
     }
 
-    public void AnimateGifToFile(IEnumerable<Image> images)
+    public void AnimateGifToFile(IReadOnlyCollection<Image> images)
     {
         using var animator = AnimatedGif.AnimatedGif
             .Create(GenerateCompleteFilePath(), _configuration.Animation.IntervalTime);

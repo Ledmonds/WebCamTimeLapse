@@ -2,9 +2,8 @@
 using System;
 using System.Timers;
 using WebCamTimeLapse.DependencyInjection;
-using WebCamTimeLapse.Services.CameraServices;
-using WebCamTimeLapse.Services.EventServices;
-using WebCamTimeLapse.Services.GifServices;
+using WebCamTimeLapse.EventHandlers;
+using WebCamTimeLapse.Events;
 
 namespace WebCamTimeLapse;
 
@@ -21,23 +20,15 @@ class Program
 
     static void Main()
     {
-        _eventHandler.StartEvent();
+        var timerEvent = _container.GetInstance<IEvent<Timer>>();
+
+        _eventHandler.StartEvent(timerEvent as TimerEvent);
 
         Console.WriteLine("Press a key to stop taking photos... ");
         Console.ReadLine();
 
-        _eventHandler.DeregisterEvent();
-
-        AnimateGifToFile();
+        _eventHandler.StopAllEvents();
 
         return;
-    }
-
-    private static void AnimateGifToFile()
-    {
-        var cameraService = _container.GetInstance<ICameraService>();
-        var gifService = _container.GetInstance<IGifService>();
-
-        gifService.AnimateGifToFile(cameraService.ReteriveCapturedImages());
     }
 }
