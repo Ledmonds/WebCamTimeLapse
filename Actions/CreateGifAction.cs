@@ -17,6 +17,6 @@ public class CreateGifAction : IDisposableAction
     public void Invoke()
     {
         var images = _imageRepository.GetAll();
-        _gifService.AnimateGifToFile(images);
+        _gifService.AnimateGifToFile(images); 
     }
 }

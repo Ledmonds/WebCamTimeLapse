@@ -20,9 +20,9 @@ class Program
 
     static void Main()
     {
-        var timerEvent = _container.GetInstance<IEvent<Timer>>();
+        var timerEvent = _container.GetInstance<IEvent<Timer>>() as TimerEvent;
 
-        _eventHandler.StartEvent(timerEvent as TimerEvent);
+        _eventHandler.StartEvent(timerEvent);
 
         Console.WriteLine("Press a key to stop taking photos... ");
         Console.ReadLine();

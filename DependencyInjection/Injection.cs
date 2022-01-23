@@ -29,7 +29,7 @@ public static class Injection
         container.Register<IWebcamService, WebcamService>();
 
         // Event Handlers
-        container.Register<IEventHandler<TimerEvent>, EventHandler>();
+        container.Register<IEventHandler<TimerEvent>, EventHandler>(Lifestyle.Singleton);
 
         // Events
         container.Register<IEvent<Timer>, TimerEvent>();
